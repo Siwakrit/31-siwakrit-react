@@ -5,20 +5,29 @@ import Button from "../components/Button";
 
 
 const Homeadmin = () => {
-  const [users, setUsers] = useState([]);
-  const [newUser, setNewUser] = useState({ name: '', lastname: '', position: '' });
+  // กำหนด state 'users' สำหรับเก็บข้อมูลผู้ใช้ในระบบ และ 'newUser' สำหรับเก็บข้อมูลของผู้ใช้ใหม่ที่กรอกเข้ามา
+  const [users, setUsers] = useState([]);  // users คืออาเรย์ที่จะเก็บข้อมูลผู้ใช้ทั้งหมด
+  const [newUser, setNewUser] = useState({ name: '', lastname: '', position: '' });  // newUser เก็บข้อมูลผู้ใช้ใหม่ที่ต้องการเพิ่ม
 
-
+  // ฟังก์ชัน addUser สำหรับเพิ่มผู้ใช้ใหม่
   const addUser = () => {
+    // สร้าง id ที่เป็นเวลาปัจจุบัน (จาก Date.now()) เพื่อให้ผู้ใช้แต่ละคนมี id ที่ไม่ซ้ำกัน
     const id = Date.now();
-    const newUserData = { ...newUser, id };
-    setUsers([...users, newUserData]);
-    setNewUser({ name: '', lastname: '', position: '' });
 
+    // สร้างข้อมูลผู้ใช้ใหม่ โดยใช้การคัดลอกข้อมูลจาก 'newUser' และเพิ่ม 'id' ลงไป
+    const newUserData = { ...newUser, id };  // spread operator ใช้คัดลอกค่าจาก newUser และเพิ่ม id
+
+    // อัปเดต state 'users' ด้วยการเพิ่มข้อมูลผู้ใช้ใหม่ลงในอาเรย์
+    setUsers([...users, newUserData]);  // ใช้ spread operator เพื่อเพิ่ม newUserData เข้าไปใน users เดิม
+
+    // รีเซ็ตค่าใน 'newUser' หลังจากเพิ่มข้อมูลผู้ใช้ใหม่เสร็จ เพื่อให้ฟอร์มว่าง
+    setNewUser({ name: '', lastname: '', position: '' });  // รีเซ็ตฟอร์มให้กลับมาว่างหลังจากการบันทึก
   };
 
+  // ฟังก์ชัน deleteUser สำหรับลบผู้ใช้
   const deleteUser = (id) => {
-    setUsers(users.filter((user) => user.id !== id));
+    // ลบผู้ใช้จากอาเรย์ 'users' โดยกรองข้อมูลที่ไม่ตรงกับ id ที่ต้องการลบ
+    setUsers(users.filter((user) => user.id !== id));  // ใช้ฟังก์ชัน filter เพื่อกรองผู้ใช้ที่ไม่ตรงกับ id ที่ต้องการลบ
   };
 
   return (
@@ -37,8 +46,9 @@ const Homeadmin = () => {
             <input
               type="text"
               placeholder="Name"
-              value={newUser.name}
-              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}
+              value={newUser.name} // กำหนดค่า value ของ input ให้ตรงกับค่าใน state 'newUser.name', เมื่อผู้ใช้กรอกข้อมูล ค่าใน state จะถูกอัปเดตตาม
+              onChange={(e) => setNewUser({ ...newUser, name: e.target.value })}// เมื่อผู้ใช้กรอกข้อมูล ฟังก์ชัน onChange จะถูกเรียก
+              // ใช้ spread operator เพื่อคัดลอกค่าจาก 'newUser' ที่เหลือ และอัปเดตเฉพาะ 'name' โดยใช้ค่าใหม่จาก 'e.target.value'
               className="border border-gray-300 p-2 rounded-md w-full"
             />
           </div>
@@ -80,7 +90,7 @@ const Homeadmin = () => {
             </tr>
           </thead>
           <tbody>
-            {users.map((user) => (
+            {users.map((user) => ( // ใช้ .map() เพื่อวนลูปผ่านข้อมูลใน 'users' ซึ่งเป็น array ของผู้ใช้
               <tr key={user.id}>
                 <td className="py-2 px-4 border">{user.name}</td>
                 <td className="py-2 px-4 border">{user.lastname}</td>
